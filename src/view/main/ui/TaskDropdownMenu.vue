@@ -75,7 +75,7 @@ defineProps({
   },
 });
 
-const emit = defineEmits(['remove-task']);
+defineEmits(['remove-task']);
 
 const isRemoveDialogOpen = ref(false);
 const isAddDialogOpen = ref(false);

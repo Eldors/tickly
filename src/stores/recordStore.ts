@@ -55,7 +55,8 @@ export const useRecordStore = defineStore('record-stores', () => {
       await recordRepository.create(taskId, dayjs().toISOString());
 
       getRecords();
-    } finally {
+    } catch (error) {
+      console.error('Failed to start record', error);
     }
   }
 
