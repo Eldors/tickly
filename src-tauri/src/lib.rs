@@ -17,6 +17,38 @@ pub fn run() {
             sql: "CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY AUTOINCREMENT, taskId INTEGER, createdAt TEXT, duration INTEGER DEFAULT null, deleted INTEGER DEFAULT 0 CHECK (deleted IN (0, 1)));",
             kind: MigrationKind::Up,
         },
+        Migration {
+            version: 3,
+            description: "add_color_column_to_task",
+            sql: "
+                ALTER TABLE tasks
+                ADD color INTEGER DEFAULT 0 CHECK (color IN (0, 360));
+
+                -- Update existing tasks
+                UPDATE tasks
+                SET color = 0
+                WHERE color IS NULL;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 4,
+            description: "change_color_column_type",
+            sql: "
+                ALTER TABLE tasks
+                DROP COLUMN color
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 5,
+            description: "add_color_column_to_task",
+            sql: "
+                ALTER TABLE tasks
+                ADD color TEXT;
+            ",
+            kind: MigrationKind::Up,
+        }
     ];
 
     tauri::Builder::default()
