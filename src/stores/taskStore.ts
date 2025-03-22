@@ -39,10 +39,21 @@ export const useTaskStore = defineStore('task-stores', () => {
     }
   }
 
+  async function updateTask(newTask: Partial<Task>) {
+    try {
+      await taskRepository.update(newTask);
+
+      getTasks();
+    } catch (e) {
+      console.error('Something went wrong', e);
+    }
+  }
+
   return {
     taskList,
     setTask,
     getTasks,
     deleteTask,
+    updateTask,
   };
 });
