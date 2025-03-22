@@ -25,7 +25,7 @@ const handleSaveClick = async () => {
 </script>
 
 <template>
-  <div class="flex justify-center items-center mb-2">
+  <div class="flex justify-center items-center mb-2 p-1">
     <Input
       v-model="newTask.name"
       class="mr-2"
