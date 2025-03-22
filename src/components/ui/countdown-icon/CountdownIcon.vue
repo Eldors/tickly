@@ -35,9 +35,9 @@ const animationDuration = computed(() => `${props.duration}s`);
 </template>
 
 <style>
-.countdown-icon {
-  width: v-bind(elementSize) !important;
-  height: v-bind(elementSize) !important;
+.countdown-icon.countdown-icon {
+  width: v-bind(elementSize);
+  height: v-bind(elementSize);
   transform: rotateY(-180deg) rotateZ(-90deg);
 }
 
