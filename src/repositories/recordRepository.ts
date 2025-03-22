@@ -1,10 +1,16 @@
 import { db } from '@/db';
 import { Record } from '@/types';
+import {
+  CREATE_RECORD_ERROR,
+  DB_NOT_INITIALIZED,
+  FETCH_RECORDS_ERROR,
+  STOP_RECORD_ERROR,
+} from '@/lib';
 
 class RecordRepository {
   async findAll(): Promise<Record[]> {
     if (!db) {
-      throw new Error('База данных не инициализирована');
+      throw new Error(DB_NOT_INITIALIZED);
     }
 
     try {
@@ -28,14 +34,14 @@ class RecordRepository {
 
       return records ?? [];
     } catch (error) {
-      console.error('Ошибка получения задач:', error);
+      console.error(FETCH_RECORDS_ERROR, error);
       throw error;
     }
   }
 
   async stopRecord(duration: number, id: number) {
     if (!db) {
-      throw new Error('База данных не инициализирована');
+      throw new Error(DB_NOT_INITIALIZED);
     }
 
     try {
@@ -51,14 +57,14 @@ class RecordRepository {
         [duration, id],
       );
     } catch (error) {
-      console.error('Ошибка получения задач:', error);
+      console.error(STOP_RECORD_ERROR, error);
       throw error;
     }
   }
 
   async create(taskId: number, createdAt: string) {
     if (!db) {
-      throw new Error('База данных не инициализирована');
+      throw new Error(DB_NOT_INITIALIZED);
     }
 
     try {
@@ -72,7 +78,7 @@ class RecordRepository {
         [taskId, createdAt],
       );
     } catch (error) {
-      console.error('Failed to create record', error);
+      console.error(CREATE_RECORD_ERROR, error);
       throw error;
     }
   }

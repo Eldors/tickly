@@ -1,11 +1,18 @@
 import { db } from '@/db';
 import { Task } from '@/types';
+import {
+  CREATE_TASK_ERROR,
+  DB_NOT_INITIALIZED,
+  DELETE_TASK_ERROR,
+  FETCH_TASKS_ERROR,
+  TASK_NAME_REQUIRED,
+  UPDATE_TASK_ERROR,
+} from '@/lib';
 
 export class TaskRepository {
-  // Получение всех активных задач
   async findAll(): Promise<Task[]> {
     if (!db) {
-      throw new Error('База данных не инициализирована');
+      throw new Error(DB_NOT_INITIALIZED);
     }
 
     try {
@@ -24,19 +31,18 @@ export class TaskRepository {
 
       return tasks ?? [];
     } catch (error) {
-      console.error('Ошибка получения задач:', error);
+      console.error(FETCH_TASKS_ERROR, error);
       throw error;
     }
   }
 
-  // Создание новой задачи
   async create(task: Partial<Task>): Promise<void> {
     if (!db) {
-      throw new Error('База данных не инициализирована');
+      throw new Error(DB_NOT_INITIALIZED);
     }
 
     if (!task.name) {
-      throw new Error('Имя задачи обязательно');
+      throw new Error(TASK_NAME_REQUIRED);
     }
 
     try {
@@ -50,7 +56,7 @@ export class TaskRepository {
         [task.name],
       );
     } catch (error) {
-      console.error('Ошибка создания задачи:', error);
+      console.error(CREATE_TASK_ERROR, error);
       throw error;
     }
   }
@@ -58,7 +64,7 @@ export class TaskRepository {
   // Пометка задачи как удаленной
   async delete(id: number): Promise<void> {
     if (!db) {
-      throw new Error('База данных не инициализирована');
+      throw new Error(DB_NOT_INITIALIZED);
     }
 
     try {
@@ -74,7 +80,7 @@ export class TaskRepository {
         [id],
       );
     } catch (error) {
-      console.error('Ошибка удаления задачи:', error);
+      console.error(DELETE_TASK_ERROR, error);
       throw error;
     }
   }
