@@ -12,7 +12,9 @@ export class TaskRepository {
       const tasks = await db.select<Task[]>(
         `
           SELECT 
-            * 
+            id,
+            name,
+            color
           FROM 
             tasks 
           WHERE 
