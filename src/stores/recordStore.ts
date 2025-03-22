@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ComputedRef, Ref, ref } from 'vue';
 import dayjs from 'dayjs';
-import { transformRecordListToHashMap } from '@/lib/utils.ts';
+import { transformRecordListToHashMap } from '@/lib/helpers.ts';
 import { recordRepository } from '@/repositories/recordRepository.ts';
 import { Record } from '@/types';
 
