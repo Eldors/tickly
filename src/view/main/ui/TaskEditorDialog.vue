@@ -13,7 +13,7 @@
           <Input
             id="name"
             v-model="newTask.name"
-            class="w-fize-4ll"
+            class="w-full"
             placeholder="Name"
           />
         </div>
