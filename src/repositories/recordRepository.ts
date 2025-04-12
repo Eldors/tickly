@@ -2,17 +2,12 @@ import { db } from '@/db';
 import { Record } from '@/types';
 import {
   CREATE_RECORD_ERROR,
-  DB_NOT_INITIALIZED,
   FETCH_RECORDS_ERROR,
   STOP_RECORD_ERROR,
 } from '@/lib';
 
 class RecordRepository {
   async findAll(): Promise<Record[]> {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     try {
       const records = await db.select<Record[]>(
         `
@@ -40,10 +35,6 @@ class RecordRepository {
   }
 
   async stopRecord(duration: number, id: number) {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     try {
       await db.execute(
         `
@@ -63,10 +54,6 @@ class RecordRepository {
   }
 
   async create(taskId: number, createdAt: string) {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     try {
       await db.execute(
         `

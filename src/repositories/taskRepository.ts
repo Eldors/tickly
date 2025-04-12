@@ -11,10 +11,6 @@ import {
 
 export class TaskRepository {
   async findAll(): Promise<Task[]> {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     try {
       const tasks = await db.select<Task[]>(
         `
@@ -37,10 +33,6 @@ export class TaskRepository {
   }
 
   async create(task: Partial<Task>): Promise<void> {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     if (!task.name) {
       throw new Error(TASK_NAME_REQUIRED);
     }
@@ -90,10 +82,6 @@ export class TaskRepository {
   }
 
   async delete(id: number): Promise<void> {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     try {
       await db.execute(
         `

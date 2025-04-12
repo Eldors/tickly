@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import MainView from '@/view/main/MainView.vue';
-import { isInit } from '@/db';
 import { useExitDialog } from '@/useExitDialog.ts';
 import { getCurrentWindow } from '@tauri-apps/api/window';
 
@@ -23,7 +22,6 @@ window.addEventListener('keydown', (e) => {
 
 <template>
   <main>
-    <span v-if="!isInit">...loading</span>
-    <MainView v-else />
+    <MainView />
   </main>
 </template>
