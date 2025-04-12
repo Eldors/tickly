@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { Ref, ref, useTemplateRef, shallowRef, watchEffect } from 'vue';
-import { useSortable } from '@vueuse/integrations/useSortable';
+import { useSortable } from '@vueuse/integrations/useSortable.mjs';
 
 import { useTaskStore } from '@/stores/taskStore.ts';
 import { useRecordStore } from '@/stores/recordStore.ts';
