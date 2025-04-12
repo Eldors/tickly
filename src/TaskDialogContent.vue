@@ -45,14 +45,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { type Task } from '@/types';
 
-defineProps({
-  selectedTask: {
-    type: Object,
-    required: false,
-    default: () => ({}),
-  },
-});
+interface Props {
+  selectedTask?: Task;
+}
+
+const { selectedTask = undefined } = defineProps<Props>();
 
 defineEmits(['close', 'submit']);
 </script>

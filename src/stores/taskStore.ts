@@ -49,11 +49,26 @@ export const useTaskStore = defineStore('task-stores', () => {
     }
   }
 
+  async function updateTaskOrder(
+    taskId: number,
+    oldPosition: number,
+    newPosition: number,
+  ) {
+    try {
+      await taskRepository.updateOrder(taskId, oldPosition, newPosition);
+
+      getTasks();
+    } catch (e) {
+      console.error('Something went wrong', e);
+    }
+  }
+
   return {
     taskList,
     setTask,
     getTasks,
     deleteTask,
     updateTask,
+    updateTaskOrder,
   };
 });

@@ -48,6 +48,30 @@ pub fn run() {
                 ADD color TEXT;
             ",
             kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 6,
+            description: "create_task_order_table",
+            sql: "
+                CREATE TABLE IF NOT EXISTS task_order (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    task_id INTEGER NOT NULL,
+                    position INTEGER NOT NULL,
+                    FOREIGN KEY(task_id) REFERENCES tasks(id)
+                );
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 7,
+            description: "fill_task_order_table",
+            sql: "
+                INSERT INTO task_order (task_id, position)
+                SELECT id, ROW_NUMBER() OVER (ORDER BY id) - 1
+                FROM tasks
+                WHERE deleted = 0;
+            ",
+            kind: MigrationKind::Up,
         }
     ];
 

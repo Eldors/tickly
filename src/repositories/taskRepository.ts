@@ -7,28 +7,30 @@ import {
   FETCH_TASKS_ERROR,
   TASK_NAME_REQUIRED,
   UPDATE_TASK_ERROR,
+  UPDATE_TASK_ORDER_ERROR,
 } from '@/lib';
+import { QueryResult } from '@tauri-apps/plugin-sql';
 
 export class TaskRepository {
   async findAll(): Promise<Task[]> {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     try {
       const tasks = await db.select<Task[]>(
         `
           SELECT 
-            id,
-            name,
-            color
+            t.id,
+            t.name,
+            t.color
           FROM 
-            tasks 
+            tasks t
+          LEFT JOIN 
+            task_order o ON t.id = o.task_id
           WHERE 
-            deleted = 0
+            t.deleted = 0
+          ORDER BY 
+            o.position
         `,
       );
-
+      console.log('tasks =>', tasks);
       return tasks ?? [];
     } catch (error) {
       console.error(FETCH_TASKS_ERROR, error);
@@ -37,25 +39,46 @@ export class TaskRepository {
   }
 
   async create(task: Partial<Task>): Promise<void> {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     if (!task.name) {
       throw new Error(TASK_NAME_REQUIRED);
     }
 
+    let newTaskId;
+
     try {
+      const { lastInsertId }: QueryResult = await db.execute(
+        `
+            INSERT INTO 
+              tasks (name, color) 
+            VALUES 
+              ($1, $2)
+          `,
+        [task.name, task.color],
+      );
+
+      newTaskId = lastInsertId;
+
       await db.execute(
         `
-          INSERT INTO 
-            tasks (name) 
-          VALUES 
-            ($1)
+          INSERT INTO
+            task_order (task_id, position)
+          VALUES
+            ($1, (SELECT ifnull(MAX(position), 0) + 1 FROM task_order))
         `,
-        [task.name],
+        [newTaskId],
       );
     } catch (error) {
+      if (newTaskId) {
+        await db.execute(
+          `
+            DELETE FROM 
+              tasks 
+            WHERE 
+              id = $1
+          `,
+          [newTaskId],
+        );
+      }
       console.error(CREATE_TASK_ERROR, error);
       throw error;
     }
@@ -90,10 +113,6 @@ export class TaskRepository {
   }
 
   async delete(id: number): Promise<void> {
-    if (!db) {
-      throw new Error(DB_NOT_INITIALIZED);
-    }
-
     try {
       await db.execute(
         `
@@ -102,12 +121,71 @@ export class TaskRepository {
           SET 
             deleted = 1
           WHERE 
-            id = $1
+            id = $1;
+        
+          UPDATE
+            task_order
+          SET
+            position = position - 1
+          WHERE
+            position > (SELECT position FROM task_order WHERE task_id = $1);
+        
+          DELETE FROM
+            task_order
+          WHERE 
+            task_id = $1;
         `,
         [id],
       );
     } catch (error) {
       console.error(DELETE_TASK_ERROR, error);
+      throw error;
+    }
+  }
+
+  async updateOrder(
+    taskId: number,
+    oldPosition: number,
+    newPosition: number,
+  ): Promise<void> {
+    try {
+      let query;
+
+      if (oldPosition < newPosition) {
+        query = `
+            UPDATE
+                task_order
+            SET
+                position = position - 1
+            WHERE
+                position > $1 AND position <= $2;
+        `;
+      } else {
+        query = `
+            UPDATE
+                task_order
+            SET
+                position = position + 1
+            WHERE
+                position < $1 AND position >= $2;
+        `;
+      }
+
+      await db.execute(
+        `
+            ${query}
+
+            UPDATE
+              task_order
+            SET
+              position = $2
+            WHERE
+              task_id = $3;
+          `,
+        [oldPosition, newPosition, taskId],
+      );
+    } catch (error) {
+      console.error(UPDATE_TASK_ORDER_ERROR, error);
       throw error;
     }
   }
