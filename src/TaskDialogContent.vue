@@ -51,7 +51,7 @@ interface Props {
   selectedTask?: Task;
 }
 
-const { selectedTask = () => ({}) } = defineProps<Props>();
+const { selectedTask = undefined } = defineProps<Props>();
 
 defineEmits(['close', 'submit']);
 </script>
