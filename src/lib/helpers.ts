@@ -8,12 +8,12 @@ export function transformRecordListToHashMap(recordList: Record[]) {
       map: Map<string, { list: Record[]; duration: number }>,
       record: Record,
     ) => {
-      const day = dayjs(record.createdAt).local().format('YYYY-MM-DD');
+      const day = dayjs(record.createdAt).format('YYYY-MM-DD');
       const currentDay = map.get(day);
 
       map.set(day, {
         list: [...(currentDay?.list ?? []), record],
-        duration: (currentDay?.duration ?? 0) + (record.duration ?? 0),
+        totalDuration: (currentDay?.duration ?? 0) + (record.duration ?? 0),
       });
 
       return map;
@@ -21,3 +21,17 @@ export function transformRecordListToHashMap(recordList: Record[]) {
     new Map(),
   );
 }
+
+export const convertSecondsToHours = (seconds?: number) => {
+  if (!seconds) {
+    return '00:00';
+  }
+
+  const minutes = seconds / 60;
+  const hours = minutes / 60;
+  return (
+    ('0' + `${Math.floor(hours)}`).slice(-2) +
+    ':' +
+    ('0' + `${Math.floor(minutes % 60)}`).slice(-2)
+  );
+};

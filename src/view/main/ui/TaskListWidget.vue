@@ -7,6 +7,7 @@
       :active="t.id === recordStore.activeRecord?.taskId"
       :color="t.color ?? 'red'"
       :name="t.name"
+      :total-duration="recordStore.totalTimeByTaskId[t.id.toString()]"
       @start-record="recordStore.startRecord(t.id)"
       @stop-record="recordStore.stopRecord"
       @click="openDialog(t)"
@@ -23,7 +24,7 @@
 <script setup lang="ts">
 import { useSortable } from '@vueuse/integrations/useSortable.mjs';
 import { SortableEvent } from 'sortablejs';
-import { Ref, ref, useTemplateRef, shallowRef, watchEffect } from 'vue';
+import { Ref, ref, shallowRef, useTemplateRef, watchEffect } from 'vue';
 
 import TaskCard from './TaskCard.vue';
 import TaskEditDialog from './TaskEditDialog.vue';

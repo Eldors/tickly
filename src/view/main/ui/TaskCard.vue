@@ -23,7 +23,10 @@
       <Play fill="#fff" />
     </Button>
     {{ name }}
-    <ChevronRight class="task-card__chevron" />
+    <div class="ml-auto flex">
+      {{ convertSecondsToHours(totalDuration) }}
+      <ChevronRight class="task-card__chevron" />
+    </div>
   </div>
 </template>
 
@@ -32,6 +35,8 @@ import { ChevronRight, Play, Square } from 'lucide-vue-next';
 import { PropType, reactive } from 'vue';
 
 import { Button } from '@/components/ui/button';
+
+import { convertSecondsToHours } from '@/lib';
 
 defineProps({
   name: {
@@ -45,6 +50,10 @@ defineProps({
   active: {
     type: Boolean as PropType<boolean>,
     required: true,
+  },
+  totalDuration: {
+    type: Number as PropType<number>,
+    default: null,
   },
 });
 

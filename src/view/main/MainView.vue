@@ -91,6 +91,8 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 
+import { convertSecondsToHours } from '@/lib';
+
 dayjs.extend(utc);
 
 const isTaskCreateDialogOpen = ref(false);
@@ -112,19 +114,5 @@ const getEndTime = (
   return typeof duration === 'number'
     ? dayjs(createdAt).local().add(duration, 's').format('HH:mm')
     : 'now';
-};
-
-const convertSecondsToHours = (seconds?: number) => {
-  if (!seconds) {
-    return '00:00';
-  }
-
-  const minutes = seconds / 60;
-  const hours = minutes / 60;
-  return (
-    ('0' + `${Math.floor(hours)}`).slice(-2) +
-    ':' +
-    ('0' + `${Math.floor(minutes % 60)}`).slice(-2)
-  );
 };
 </script>

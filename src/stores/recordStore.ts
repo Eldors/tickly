@@ -14,6 +14,27 @@ export const useRecordStore = defineStore('record-stores', () => {
     recordList.value.find((record: Record) => record.duration === null),
   );
 
+  const totalTimeByTaskId: ComputedRef<{
+    [key: string]: number;
+  }> = computed(() => {
+    if (!recordList.value.length) return {};
+
+    const totalDurationByTaskIdMap = recordList.value.reduce(
+      (acc: Map<string, number>, value: Record): Map<string, number> => {
+        const key = value.taskId.toString();
+        let duration = acc.get(key) ?? 0;
+
+        duration += value.duration ?? 0;
+        acc.set(key, duration);
+
+        return acc;
+      },
+      new Map(),
+    );
+
+    return Object.fromEntries(totalDurationByTaskIdMap);
+  });
+
   const mainViewRecords: ComputedRef<
     Map<
       string,
@@ -65,6 +86,7 @@ export const useRecordStore = defineStore('record-stores', () => {
   return {
     recordList,
     activeRecord,
+    totalTimeByTaskId,
     mainViewRecords,
     stopRecord,
     startRecord,
