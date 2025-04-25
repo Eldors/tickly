@@ -12,7 +12,7 @@
       @click="openDialog(t)"
     />
   </div>
-  <TaskEditorDialog
+  <TaskEditDialog
     v-model:open="open"
     :task="task"
     @save="taskStore.updateTask"
@@ -26,7 +26,7 @@ import { SortableEvent } from 'sortablejs';
 import { Ref, ref, useTemplateRef, shallowRef, watchEffect } from 'vue';
 
 import TaskCard from './TaskCard.vue';
-import TaskEditorDialog from './TaskEditorDialog.vue';
+import TaskEditDialog from './TaskEditDialog.vue';
 
 import { useRecordStore } from '@/stores/recordStore.ts';
 import { useTaskStore } from '@/stores/taskStore.ts';

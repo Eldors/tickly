@@ -7,21 +7,10 @@
       <DialogHeader>
         <DialogTitle>{{ title }}</DialogTitle>
       </DialogHeader>
-      <div>
-        <div class="grid w-full items-center gap-1.5">
-          <Label for="name">Name</Label>
-          <Input
-            id="name"
-            v-model="newTask.name"
-            class="w-full"
-            placeholder="Name"
-          />
-        </div>
-        <div>
-          <Label>Color</Label>
-          <TailwindColorPicker v-model:initial-color="newTask.color" />
-        </div>
-      </div>
+      <TaskEditForm
+        :task="newTask"
+        @update:task="handleUpdateTask"
+      />
       <DialogFooter>
         <ConfirmButton
           variant="destructive"
@@ -37,6 +26,12 @@
 </template>
 
 <script setup lang="ts">
+import { PropType, reactive, watchEffect } from 'vue';
+
+import TaskEditForm from './TaskEditForm.vue';
+
+import { Button } from '@/components/ui/button';
+import { ConfirmButton } from '@/components/ui/confirm-button';
 import {
   Dialog,
   DialogContent,
@@ -45,14 +40,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-
-import { Button } from '@/components/ui/button';
-import { PropType, reactive, watchEffect } from 'vue';
 import { Task } from '@/types';
-import TailwindColorPicker from './TailwindColorPicker.vue';
-import ConfirmButton from '@/components/ui/confirm-button/ConfirmButton.vue';
 
 const props = defineProps({
   title: {
@@ -85,6 +73,10 @@ const handleSaveClick = () => {
 const handleRemoveClick = () => {
   emits('delete', props.task?.id);
   closeDialog();
+};
+
+const handleUpdateTask = (event: Partial<Task>) => {
+  Object.assign(newTask, event);
 };
 
 watchEffect(() => {

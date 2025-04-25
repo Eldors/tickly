@@ -9,17 +9,13 @@
       class="flex p-2 flex-col max-h-screen"
     >
       <ScrollArea class="h-screen">
-        <!--      <Button-->
-        <!--        class="m-2"-->
-        <!--        @click="clearState"-->
-        <!--        >ClearState</Button-->
-        <!--      >-->
-        <AddNewTask />
+        <TaskListToolbar @add-task-click="isTaskCreateDialogOpen = true" />
         <Separator
           class="mb-2"
           decorative
         />
         <TaskListWidget />
+        <TaskCreateDialog v-model:open="isTaskCreateDialogOpen" />
       </ScrollArea>
     </ResizablePanel>
     <ResizableHandle id="demo-handle-1" />
@@ -77,21 +73,27 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { ref } from 'vue';
+
+import TaskCreateDialog from './ui/TaskCreateDialog.vue';
+import TaskListToolbar from './ui/TaskListToolbar.vue';
+import TaskListWidget from './ui/TaskListWidget.vue';
+
+import { useRecordStore } from '@/stores/recordStore.ts';
+
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from '@/components/ui/resizable';
-import { Separator } from '@/components/ui/separator';
-import AddNewTask from '@/AddNewTask.vue';
-import dayjs from 'dayjs';
-import TaskListWidget from '@/view/main/ui/TaskListWidget.vue';
-import { useRecordStore } from '@/stores/recordStore.ts';
-
-import utc from 'dayjs/plugin/utc';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
 
 dayjs.extend(utc);
+
+const isTaskCreateDialogOpen = ref(false);
 
 const recordStore = useRecordStore();
 
