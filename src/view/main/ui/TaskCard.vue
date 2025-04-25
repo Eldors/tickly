@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-row gap-2 p-2 rounded-md items-center task-card ring-current cursor-pointer border rounded-md mb-2"
+    class="flex flex-row gap-2 p-2 items-center task-card ring-current cursor-pointer border rounded-md mb-2"
     :class="{ [taskBgColorVariants[color]]: active }"
   >
     <Button
