@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { reactive } from 'vue';
+
+import { useTaskStore } from '@/stores/taskStore.ts';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+
 import { Task } from '@/types';
-import { reactive } from 'vue';
-import { useTaskStore } from '@/stores/taskStore.ts';
 
 const { setTask } = useTaskStore();
 

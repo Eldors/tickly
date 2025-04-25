@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { type HTMLAttributes, ref, watchEffect } from 'vue';
-import type { PrimitiveProps } from 'radix-vue';
+
 import type { ButtonVariants } from '@/components/ui/button';
 import { Button } from '@/components/ui/button';
 import { CountdownIcon } from '@/components/ui/countdown-icon';
+
+import type { PrimitiveProps } from 'radix-vue';
 
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants['variant'];

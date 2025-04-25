@@ -1,5 +1,6 @@
-import { Ref, ref } from 'vue';
 import { defineStore } from 'pinia';
+import { Ref, ref } from 'vue';
+
 import { taskRepository } from '@/repositories';
 import { Task } from '@/types';
 

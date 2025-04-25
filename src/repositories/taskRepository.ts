@@ -1,5 +1,6 @@
+import { QueryResult } from '@tauri-apps/plugin-sql';
+
 import { db } from '@/db';
-import { Task } from '@/types';
 import {
   CREATE_TASK_ERROR,
   DB_NOT_INITIALIZED,
@@ -9,7 +10,7 @@ import {
   UPDATE_TASK_ERROR,
   UPDATE_TASK_ORDER_ERROR,
 } from '@/lib';
-import { QueryResult } from '@tauri-apps/plugin-sql';
+import { Task } from '@/types';
 
 export class TaskRepository {
   async findAll(): Promise<Task[]> {

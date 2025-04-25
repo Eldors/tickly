@@ -28,8 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, reactive } from 'vue';
 import { ChevronRight, Play, Square } from 'lucide-vue-next';
+import { PropType, reactive } from 'vue';
+
 import { Button } from '@/components/ui/button';
 
 defineProps({

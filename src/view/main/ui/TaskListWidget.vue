@@ -21,15 +21,17 @@
 </template>
 
 <script setup lang="ts">
-import { Ref, ref, useTemplateRef, shallowRef, watchEffect } from 'vue';
 import { useSortable } from '@vueuse/integrations/useSortable.mjs';
+import { SortableEvent } from 'sortablejs';
+import { Ref, ref, useTemplateRef, shallowRef, watchEffect } from 'vue';
 
-import { useTaskStore } from '@/stores/taskStore.ts';
-import { useRecordStore } from '@/stores/recordStore.ts';
-import { Task } from '@/types';
 import TaskCard from './TaskCard.vue';
 import TaskEditorDialog from './TaskEditorDialog.vue';
-import { SortableEvent } from 'sortablejs';
+
+import { useRecordStore } from '@/stores/recordStore.ts';
+import { useTaskStore } from '@/stores/taskStore.ts';
+
+import { Task } from '@/types';
 
 const taskStore = useTaskStore();
 const recordStore = useRecordStore();

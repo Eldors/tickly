@@ -1,5 +1,6 @@
-import { Record } from '@/types/index.js';
 import dayjs from 'dayjs';
+
+import { Record } from '@/types/index.js';
 
 export function transformRecordListToHashMap(recordList: Record[]) {
   return recordList.reduceRight(

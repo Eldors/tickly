@@ -1,8 +1,9 @@
-import globals from 'globals';
 import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import pluginVue from 'eslint-plugin-vue';
 import vueConfigPrettier from '@vue/eslint-config-prettier';
+import pluginImport from 'eslint-plugin-import';
+import pluginVue from 'eslint-plugin-vue';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -17,9 +18,53 @@ export default [
   // js
   pluginJs.configs.recommended,
   {
+    plugins: {
+      import: pluginImport,
+    },
     rules: {
       'no-unused-vars': 'off',
       'no-undef': 'off',
+      // Disable the built-in sort-imports as we're using import/order instead
+      'sort-imports': 'off',
+      'import/order': [
+        'error',
+        {
+          groups: [
+            'builtin', // Node.js built-in modules
+            'external', // External libraries
+            'parent', // Relative imports (parent directory)
+            'sibling', // Relative imports (same directory)
+            'internal', // Absolute imports (using @ alias)
+            'index', // Index imports
+            'object', // Object imports
+            'type', // Type imports
+          ],
+          pathGroups: [
+            // Custom groups for specific paths
+            { pattern: 'db/**', group: 'internal', position: 'after' },
+            { pattern: 'stores/**', group: 'internal', position: 'after' },
+            { pattern: 'types/**', group: 'internal', position: 'after' },
+            { pattern: 'lib/**', group: 'internal', position: 'after' },
+            { pattern: 'components/**', group: 'internal', position: 'after' },
+            // Alias patterns
+            { pattern: '@/db/**', group: 'internal', position: 'after' },
+            { pattern: '@/stores/**', group: 'internal', position: 'after' },
+            { pattern: '@/types/**', group: 'internal', position: 'after' },
+            { pattern: '@/lib/**', group: 'internal', position: 'after' },
+            {
+              pattern: '@/components/**',
+              group: 'internal',
+              position: 'after',
+            },
+          ],
+          pathGroupsExcludedImportTypes: ['builtin'],
+          'newlines-between': 'always',
+          alphabetize: {
+            order: 'asc',
+            caseInsensitive: true,
+          },
+        },
+      ],
     },
   },
   // ts

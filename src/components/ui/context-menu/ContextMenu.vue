@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import type { ContextMenuRootEmits, ContextMenuRootProps } from 'radix-vue';
 import { ContextMenuRoot, useForwardPropsEmits } from 'radix-vue';
+
+import type { ContextMenuRootEmits, ContextMenuRootProps } from 'radix-vue';
 
 const props = defineProps<ContextMenuRootProps>();
 const emits = defineEmits<ContextMenuRootEmits>();

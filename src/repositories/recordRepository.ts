@@ -1,10 +1,10 @@
 import { db } from '@/db';
-import { Record } from '@/types';
 import {
   CREATE_RECORD_ERROR,
   FETCH_RECORDS_ERROR,
   STOP_RECORD_ERROR,
 } from '@/lib';
+import { Record } from '@/types';
 
 class RecordRepository {
   async findAll(): Promise<Record[]> {

@@ -1,4 +1,5 @@
 import Database, { QueryResult } from '@tauri-apps/plugin-sql';
+
 import { DB_NOT_INITIALIZED, DB_OPERATION_ERROR } from '@/lib';
 
 class Actor {
