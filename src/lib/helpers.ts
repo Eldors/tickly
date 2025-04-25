@@ -13,7 +13,7 @@ export function transformRecordListToHashMap(recordList: Record[]) {
 
       map.set(day, {
         list: [...(currentDay?.list ?? []), record],
-        totalDuration: (currentDay?.duration ?? 0) + (record.duration ?? 0),
+        duration: (currentDay?.duration ?? 0) + (record.duration ?? 0),
       });
 
       return map;
