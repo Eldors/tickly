@@ -3,7 +3,7 @@ import {
   DialogDescription,
   type DialogDescriptionProps,
   useForwardProps,
-} from 'radix-vue';
+} from 'reka-ui';
 import { computed, type HTMLAttributes } from 'vue';
 
 import { cn } from '@/lib/utils';
@@ -23,8 +23,9 @@ const forwardedProps = useForwardProps(delegatedProps);
 
 <template>
   <DialogDescription
+    data-slot="dialog-description"
     v-bind="forwardedProps"
-    :class="cn('text-sm text-muted-foreground', props.class)"
+    :class="cn('text-muted-foreground text-sm', props.class)"
   >
     <slot />
   </DialogDescription>

@@ -1,19 +1,14 @@
-import { defineConfig } from 'vite';
-import autoprefixer from 'autoprefixer';
-import tailwind from 'tailwindcss';
-import vue from '@vitejs/plugin-vue';
 import { fileURLToPath } from 'node:url';
+
+import tailwindcss from '@tailwindcss/vite';
+import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
 
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
-export default defineConfig(async () => ({
-  css: {
-    postcss: {
-      plugins: [tailwind(), autoprefixer()],
-    },
-  },
-  plugins: [vue()],
+export default defineConfig({
+  plugins: [vue(), tailwindcss()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
@@ -41,4 +36,4 @@ export default defineConfig(async () => ({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-}));
+});
