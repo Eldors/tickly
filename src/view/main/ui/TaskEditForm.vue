@@ -27,7 +27,7 @@ defineEmits(['update:task']);
         @update:model-value="$emit('update:task', { ...task, name: $event })"
       />
     </div>
-    <div class="grid w-full items-center gap-1.5">
+    <div>
       <Label>Color</Label>
       <TailwindColorPicker
         :initial-color="task.color"
