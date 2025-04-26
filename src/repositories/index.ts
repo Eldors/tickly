@@ -1,4 +1,4 @@
-import { recordRepository } from './recordRepository.ts';
 import { taskRepository } from './taskRepository.ts';
+import { timeEntryRepository } from './timeEntryRepository.ts';
 
-export { taskRepository, recordRepository };
+export { taskRepository, timeEntryRepository };

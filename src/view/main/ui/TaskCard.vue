@@ -8,7 +8,7 @@
       class="rounded-full task-card__play-button"
       :class="playButtonBgColorVariants[color]"
       size="icon"
-      @click.stop="$emit('stop-record')"
+      @click.stop="$emit('stop-time-entry')"
     >
       <Square stroke-width="3" />
     </Button>
@@ -17,7 +17,7 @@
       class="rounded-full task-card__play-button text-primary-foreground hover:text-primary-foreground"
       :class="playButtonBgColorVariants[color]"
       size="icon"
-      @click.stop="$emit('start-record')"
+      @click.stop="$emit('start-time-entry')"
     >
       <!--      :class="bgPlayButtonColor[color]"-->
       <Play fill="#fff" />
@@ -57,7 +57,7 @@ defineProps({
   },
 });
 
-defineEmits(['start-record', 'stop-record']);
+defineEmits(['start-time-entry', 'stop-time-entry']);
 
 const taskBgColorVariants: Record<string, string> = reactive({
   red: 'bg-red-50',

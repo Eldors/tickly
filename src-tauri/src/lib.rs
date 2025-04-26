@@ -72,6 +72,15 @@ pub fn run() {
                 WHERE deleted = 0;
             ",
             kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 8,
+            description: "rename_task_order_table",
+            sql: "
+                ALTER TABLE records
+                RENAME TO time_entries;
+            ",
+            kind: MigrationKind::Up,
         }
     ];
 

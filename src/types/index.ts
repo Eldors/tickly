@@ -1,2 +1,2 @@
-export * from './record.ts';
+export * from './timeEntry.ts';
 export * from './task.ts';

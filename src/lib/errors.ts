@@ -8,7 +8,7 @@ export const CREATE_TASK_ERROR: string = 'Error creating task:';
 export const UPDATE_TASK_ERROR: string = 'Error updating task:';
 export const DELETE_TASK_ERROR: string = 'Error deleting task:';
 export const UPDATE_TASK_ORDER_ERROR: string = 'Error updating task order:';
-// record repository errors
-export const FETCH_RECORDS_ERROR: string = 'Error fetching records:';
-export const STOP_RECORD_ERROR: string = 'Error stopping record:';
-export const CREATE_RECORD_ERROR: string = 'Error creating record:';
+// time entry repository errors
+export const FETCH_TIME_ENTRIES_ERROR: string = 'Error fetching time entries:';
+export const STOP_TIME_ENTRY_ERROR: string = 'Error stopping time entry:';
+export const CREATE_TIME_ENTRY_ERROR: string = 'Error creating time entry:';

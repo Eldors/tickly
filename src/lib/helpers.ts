@@ -1,19 +1,19 @@
 import dayjs from 'dayjs';
 
-import { Record } from '@/types/index.js';
+import { TimeEntry } from '@/types';
 
-export function transformRecordListToHashMap(recordList: Record[]) {
-  return recordList.reduceRight(
+export function transformTimeEntryListToHashMap(timeEntries: TimeEntry[]) {
+  return timeEntries.reduceRight(
     (
-      map: Map<string, { list: Record[]; duration: number }>,
-      record: Record,
+      map: Map<string, { list: TimeEntry[]; duration: number }>,
+      entry: TimeEntry,
     ) => {
-      const day = dayjs(record.createdAt).format('YYYY-MM-DD');
+      const day = dayjs(entry.createdAt).format('YYYY-MM-DD');
       const currentDay = map.get(day);
 
       map.set(day, {
-        list: [...(currentDay?.list ?? []), record],
-        duration: (currentDay?.duration ?? 0) + (record.duration ?? 0),
+        list: [...(currentDay?.list ?? []), entry],
+        duration: (currentDay?.duration ?? 0) + (entry.duration ?? 0),
       });
 
       return map;

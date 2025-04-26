@@ -1,5 +1,5 @@
-export interface Record {
-  recordId: number;
+export interface TimeEntry {
+  id: number;
   taskId: number;
   createdAt: string;
   name: string;

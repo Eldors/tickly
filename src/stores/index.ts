@@ -1,4 +1,4 @@
-import { useRecordStore } from './recordStore.ts';
 import { useTaskStore } from './taskStore.ts';
+import { useTimeEntryStore } from './timeEntryStore.ts';
 
-export { useRecordStore, useTaskStore };
+export { useTimeEntryStore, useTaskStore };

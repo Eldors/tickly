@@ -4,12 +4,12 @@
       v-for="t in list"
       :key="t.id"
       :data-id="t.id"
-      :active="t.id === recordStore.activeRecord?.taskId"
+      :active="t.id === timeEntryStore.activeTimeEntry?.taskId"
       :color="t.color ?? 'red'"
       :name="t.name"
-      :total-duration="recordStore.totalTimeByTaskId[t.id.toString()]"
-      @start-record="recordStore.startRecord(t.id)"
-      @stop-record="recordStore.stopRecord"
+      :total-duration="timeEntryStore.totalTimeByTaskId[t.id.toString()]"
+      @start-time-entry="timeEntryStore.startTimeEntry(t.id)"
+      @stop-time-entry="timeEntryStore.stopTimeEntry"
       @click="openDialog(t)"
     />
   </div>
@@ -29,21 +29,20 @@ import { Ref, ref, shallowRef, useTemplateRef, watchEffect } from 'vue';
 import TaskCard from './TaskCard.vue';
 import TaskEditDialog from './TaskEditDialog.vue';
 
-import { useRecordStore } from '@/stores/recordStore.ts';
-import { useTaskStore } from '@/stores/taskStore.ts';
-
+import { useTaskStore } from '@/stores';
+import { useTimeEntryStore } from '@/stores';
 import { Task } from '@/types';
 
 const taskStore = useTaskStore();
-const recordStore = useRecordStore();
+const timeEntryStore = useTimeEntryStore();
 const open: Ref<boolean> = ref(false);
 const task: Ref<Partial<Task> | null> = ref(null);
 const el = useTemplateRef<HTMLElement>('el');
 const list = shallowRef<Task[]>([]);
 
 const handleRemoveClick = async (id: number) => {
-  if (id === recordStore.activeRecord?.taskId) {
-    await recordStore.stopRecord();
+  if (id === timeEntryStore.activeTimeEntry?.taskId) {
+    await timeEntryStore.stopTimeEntry();
   }
 
   await taskStore.deleteTask(id);
@@ -57,7 +56,7 @@ const openDialog = (t: Task) => {
 };
 
 taskStore.getTasks();
-recordStore.getRecords();
+timeEntryStore.getTimeEntries();
 
 useSortable(el, list, {
   forceFallback: true,

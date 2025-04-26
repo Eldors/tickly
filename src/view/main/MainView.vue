@@ -26,7 +26,7 @@
     >
       <ScrollArea class="h-screen">
         <div
-          v-for="[key, value] in recordStore.mainViewRecords"
+          v-for="[key, value] in timeEntryStore.mainViewTimeEntries"
           :key="key"
         >
           <div
@@ -81,7 +81,7 @@ import TaskCreateDialog from './ui/TaskCreateDialog.vue';
 import TaskListToolbar from './ui/TaskListToolbar.vue';
 import TaskListWidget from './ui/TaskListWidget.vue';
 
-import { useRecordStore } from '@/stores/recordStore.ts';
+import { useTimeEntryStore } from '@/stores/timeEntryStore.ts';
 
 import {
   ResizableHandle,
@@ -97,7 +97,7 @@ dayjs.extend(utc);
 
 const isTaskCreateDialogOpen = ref(false);
 
-const recordStore = useRecordStore();
+const timeEntryStore = useTimeEntryStore();
 
 const getStartTime = (createdAt: string): string => {
   return dayjs(createdAt).local().format('HH:mm');
