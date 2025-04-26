@@ -4,7 +4,7 @@ import {
   type SplitterGroupEmits,
   type SplitterGroupProps,
   useForwardPropsEmits,
-} from 'radix-vue';
+} from 'reka-ui';
 import { computed, type HTMLAttributes } from 'vue';
 
 import { cn } from '@/lib/utils';
@@ -24,12 +24,10 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
 <template>
   <SplitterGroup
+    data-slot="resizable-panel-group"
     v-bind="forwarded"
     :class="
-      cn(
-        'flex h-full w-full data-[panel-group-direction=vertical]:flex-col',
-        props.class,
-      )
+      cn('flex h-full w-full data-[orientation=vertical]:flex-col', props.class)
     "
   >
     <slot />

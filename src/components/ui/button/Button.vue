@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Primitive, type PrimitiveProps } from 'radix-vue';
+import { Primitive, type PrimitiveProps } from 'reka-ui';
 
 import { cn } from '@/lib/utils';
 
@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
   <Primitive
+    data-slot="button"
     :as="as"
     :as-child="asChild"
     :class="cn(buttonVariants({ variant, size }), props.class)"
