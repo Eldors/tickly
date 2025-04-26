@@ -13,14 +13,14 @@ class TimeEntryRepository {
         `
           SELECT
             e.id,
-            e.taskId,
-            e.createdAt,
-            e.duration,
+            e.task_id AS taskId,
+            e.started_at AS startedAt,
+            e.stopped_at AS stoppedAt,
             t.name
           FROM
             time_entries e
           JOIN
-            tasks t ON t.id = e.taskId
+            tasks t ON t.id = e.task_id
           WHERE
             e.deleted = 0
             AND t.deleted = 0
@@ -34,18 +34,18 @@ class TimeEntryRepository {
     }
   }
 
-  async stopTimeEntry(duration: number, id: number) {
+  async stopTimeEntry(id: number) {
     try {
       await db.execute(
         `
-        UPDATE
-          time_entries
-        SET
-          duration = $1
-        WHERE
-          id = $2
+          UPDATE
+            time_entries
+          SET
+            stopped_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+          WHERE
+            id = $1
       `,
-        [duration, id],
+        [id],
       );
     } catch (error) {
       console.error(STOP_TIME_ENTRY_ERROR, error);
@@ -53,16 +53,21 @@ class TimeEntryRepository {
     }
   }
 
-  async create(taskId: number, createdAt: string) {
+  async startTimeEntry(taskId: number) {
     try {
       await db.execute(
         `
-          INSERT INTO
-            time_entries (taskId, createdAt) 
-          VALUES 
-            ($1, $2)
+          INSERT INTO 
+            time_entries (task_id, started_at)
+          SELECT
+            $1,
+            strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+          FROM 
+            tasks
+          WHERE 
+            id = $1 AND deleted = 0;
         `,
-        [taskId, createdAt],
+        [taskId],
       );
     } catch (error) {
       console.error(CREATE_TIME_ENTRY_ERROR, error);

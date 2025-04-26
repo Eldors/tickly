@@ -1,8 +1,7 @@
-import dayjs from 'dayjs';
 import { defineStore } from 'pinia';
 import { computed, ComputedRef, Ref, ref } from 'vue';
 
-import { transformTimeEntryListToHashMap } from '@/lib';
+import { getDifferenceInSeconds, transformTimeEntryListToHashMap } from '@/lib';
 import { timeEntryRepository } from '@/repositories';
 import { TimeEntry } from '@/types';
 
@@ -10,7 +9,7 @@ export const useTimeEntryStore = defineStore('time-entry-store', () => {
   const timeEntryList: Ref<TimeEntry[]> = ref([]);
 
   const activeTimeEntry: ComputedRef<TimeEntry | undefined> = computed(() =>
-    timeEntryList.value.find((entry: TimeEntry) => entry.duration === null),
+    timeEntryList.value.find((entry: TimeEntry) => entry.stoppedAt === null),
   );
 
   const totalTimeByTaskId: ComputedRef<{
@@ -21,10 +20,19 @@ export const useTimeEntryStore = defineStore('time-entry-store', () => {
     const totalDurationByTaskIdMap = timeEntryList.value.reduce(
       (acc: Map<string, number>, value: TimeEntry): Map<string, number> => {
         const key = value.taskId.toString();
-        let duration = acc.get(key) ?? 0;
 
-        duration += value.duration ?? 0;
-        acc.set(key, duration);
+        if (!value.stoppedAt) {
+          return acc;
+        }
+
+        const currentEntryDuration = getDifferenceInSeconds(
+          value.startedAt,
+          value.stoppedAt,
+        );
+        let currentEntryTaskDuration = acc.get(key) ?? 0;
+
+        currentEntryTaskDuration += currentEntryDuration ?? 0;
+        acc.set(key, currentEntryTaskDuration);
 
         return acc;
       },
@@ -58,15 +66,7 @@ export const useTimeEntryStore = defineStore('time-entry-store', () => {
     }
 
     try {
-      const duration = dayjs().diff(
-        dayjs(activeTimeEntry.value.createdAt),
-        's',
-      );
-
-      await timeEntryRepository.stopTimeEntry(
-        duration,
-        activeTimeEntry.value.id,
-      );
+      await timeEntryRepository.stopTimeEntry(activeTimeEntry.value.id);
 
       getTimeEntries();
     } catch {}
@@ -76,7 +76,7 @@ export const useTimeEntryStore = defineStore('time-entry-store', () => {
     try {
       await stopTimeEntry();
 
-      await timeEntryRepository.create(taskId, dayjs().toISOString());
+      await timeEntryRepository.startTimeEntry(taskId);
 
       getTimeEntries();
     } catch {}

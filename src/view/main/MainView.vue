@@ -46,10 +46,10 @@
           >
             <div>
               <div class="text-sm">
-                {{ getEndTime(item.createdAt, item.duration) }}
+                {{ getEndTime(item.stoppedAt) }}
               </div>
               <div class="text-sm text-gray-500">
-                {{ getStartTime(item.createdAt) }}
+                {{ getStartTime(item.startedAt) }}
               </div>
             </div>
             <Separator
@@ -62,7 +62,9 @@
                 {{ item.name }}
               </div>
               <div>
-                {{ convertSecondsToHours(item.duration) }}
+                {{
+                  getDurationInHoursAndMinutes(item.startedAt, item.stoppedAt)
+                }}
               </div>
             </div>
           </div>
@@ -91,7 +93,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 
-import { convertSecondsToHours } from '@/lib';
+import { convertSecondsToHours, getDurationInHoursAndMinutes } from '@/lib';
 
 dayjs.extend(utc);
 
@@ -99,20 +101,19 @@ const isTaskCreateDialogOpen = ref(false);
 
 const timeEntryStore = useTimeEntryStore();
 
-const getStartTime = (createdAt: string): string => {
-  return dayjs(createdAt).local().format('HH:mm');
+const getStartTime = (startedAt: string): string => {
+  return dayjs(startedAt).local().format('HH:mm');
 };
 
 const getTitleDate = (date: string): string => {
   return dayjs(date).format('dddd, MMMM D');
 };
 
-const getEndTime = (
-  createdAt: string,
-  duration: number | undefined,
-): string => {
-  return typeof duration === 'number'
-    ? dayjs(createdAt).local().add(duration, 's').format('HH:mm')
-    : 'now';
+const getEndTime = (stoppedAt: string | null) => {
+  if (!stoppedAt) {
+    return 'now';
+  }
+
+  return dayjs(stoppedAt).local().format('HH:mm');
 };
 </script>

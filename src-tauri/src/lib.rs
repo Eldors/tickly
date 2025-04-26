@@ -81,7 +81,64 @@ pub fn run() {
                 RENAME TO time_entries;
             ",
             kind: MigrationKind::Up,
-        }
+        },
+        Migration {
+            version: 9,
+            description: "add_started_at_column",
+            sql: "
+                ALTER TABLE time_entries
+                ADD started_at TEXT;
+
+                UPDATE time_entries
+                SET started_at = createdAt
+                WHERE started_at IS NULL;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 10,
+            description: "add_stopped_at_column",
+            sql: "
+                ALTER TABLE time_entries
+                ADD stopped_at TEXT;
+
+                UPDATE time_entries
+                SET stopped_at = strftime(
+                   '%Y-%m-%dT%H:%M:%fZ',
+                   strftime('%s', createdAt) + duration,
+                   'unixepoch'
+                )
+                WHERE stopped_at IS NULL;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 11,
+            description: "drop_createdAt_column",
+            sql: "
+                ALTER TABLE time_entries
+                DROP COLUMN createdAt;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 12,
+            description: "drop_duration_column",
+            sql: "
+                ALTER TABLE time_entries
+                DROP COLUMN duration;
+            ",
+            kind: MigrationKind::Up,
+        },
+        Migration {
+            version: 13,
+            description: "rename_taskId_column",
+            sql: "
+                ALTER TABLE time_entries
+                RENAME taskId TO task_id;
+            ",
+            kind: MigrationKind::Up,
+        },
     ];
 
     tauri::Builder::default()
